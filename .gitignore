@@ -2,5 +2,5 @@
 /boot/glim
 /boot/grub2-theme-vimix
 /boot/iso/*
-/grub
+#/grub
 /.Trash*
