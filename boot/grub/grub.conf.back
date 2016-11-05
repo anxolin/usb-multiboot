@@ -1,0 +1,172 @@
+# There's several options for finding the ISOS
+# I'm saving the ISOs in 'boot/iso' of the same device of grub (option1)
+
+# 2 interesting projects:
+#  - https://github.com/thias/glim
+#  - 
+
+# Option1: ISO in same Disk as GRUB
+#   If the ISO images are on the same partition as grub, use the following to read the UUID at boot time:
+#   path to the partition holding ISO images (using UUID)
+probe -u $root --set=rootuuid
+set imgdevpath="/dev/disk/by-uuid/$rootuuid"
+
+
+# Options 2: identify the disk using UUID (lsblk -f)
+#   path to the partition holding ISO images (using UUID)
+#set imgdevpath="/dev/disk/by-uuid/UUID_value"
+
+# Option 3: Identify the disk using the device label
+#   path to the partition holding ISO images (using labels)
+#set imgdevpath="/dev/disk/by-label/label_value"
+
+
+##################################### I S O ' s #######################################
+
+######################################
+# Clonezilla
+######################################
+menuentry "[loopback]clonezilla-live-2.2.3-25-amd64" {
+	set isofile="/boot/iso/clonezilla-live-2.2.3-25-amd64.iso"
+	loopback loop $isofile
+	linux (loop)/live/vmlinuz findiso=$isofile boot=live union=overlay username=user config
+	initrd (loop)/live/initrd.img
+}
+
+######################################
+# SystemRescueCD
+######################################
+menuentry '[loopback]systemrescuecd-x86-4.5.2' {
+	set isofile='/boot/iso/systemrescuecd-x86-4.5.2.iso'
+	loopback loop $isofile
+	linux (loop)/isolinux/rescue64 isoloop=$isofile
+	initrd (loop)/isolinux/initram.igz
+}
+
+
+######################################
+# Memtest
+######################################
+
+
+######################################
+# GParted Live
+######################################
+
+menuentry "[loopback]gparted-live-0.22.0-2-amd64" {
+	set isofile="/boot/iso/gparted-live-0.22.0-2-amd64.iso"
+	loopback loop $isofile
+	linux (loop)/live/vmlinuz boot=live union=overlay username=user config components quiet noswap noeject toram=filesystem.squashfs ip=  nosplash findiso=$isofile
+	initrd (loop)/live/initrd.img
+}
+
+######################################
+opback]kali-linux-1.0.7-amd64" {
+	set isofile='/boot/iso/kali-linux-1.0.7-amd64.iso'
+	loopback loop $isofile
+	linux (loop)/live/vmlinuz boot=live findiso=$isofile noconfig=sudo username=root hostname=kali
+	initrd (loop)/live/initrd.img
+}
+# Alpine Linux
+######################################
+opback]Alpine Linux' {
+        set isofile='/boot/iso/alpine.iso'
+        loopback loop $isofile
+        set root=loop
+        linux /boot/vmlinuz-grsec modloop=/boot/modloop-grsec modules=loop,squashfs,sd-mod,usb-storage quiet
+        initrd /boot/initramfs-grsec
+}
+
+
+######################################
+# Alpine Linux
+######################################
+# if you want to boot into a 32-bit system, replace x86_64 with x86.
+
+# wget https://fr.alpinelinux.org/alpine/v3.4/releases/x86_64/alpine-3.4.5-x86_64.iso
+menuentry '[loopback]alpine x86_64' {
+        set isofile='/boot/iso/original/alpine-3.4.5-x86_64.iso'
+        loopback loop $isofile
+        set root=loop
+        linux /boot/vmlinuz-grsec modloop=/boot/modloop-grsec modules=loop,squashfs,sd-mod,usb-storage quiet
+        initrd /boot/initramfs-grsec
+}
+
+
+menuentry '[loopback]Alpine Linux' {
+        set isofile='/boot/iso/alpine.iso'
+        loopback loop $isofile
+        set root=loop
+        linux /boot/vmlinuz-grsec modloop=/boot/modloop-grsec modules=loop,squashfs,sd-mod,usb-storage quiet
+        initrd /boot/initramfs-grsec
+}
+
+
+######################################
+# Alpine Linux Extended - With common packages
+######################################
+
+
+
+
+######################################
+# Archlinux
+######################################
+menuentry '[loopback]archlinux-2014.12.01-dual.iso' {
+	set isofile='/boot/iso/archlinux-2014.12.01-dual.iso'
+	loopback loop $isofile
+	linux (loop)/arch/boot/x86_64/vmlinuz archisodevice=/dev/loop0 img_dev=$imgdevpath img_loop=$isofile earlymodules=loop
+	initrd (loop)/arch/boot/x86_64/archiso.img
+}
+
+
+######################################
+# Linux Mint KDE 
+######################################
+
+
+
+######################################
+# Linux Mint XFCE
+######################################
+
+
+
+######################################
+# Manjaro
+######################################
+
+
+
+######################################
+# Debian 
+######################################
+menuentry '[loopback]debian-7.8.0-amd64-DVD-1' {
+	set isofile='/boot/iso/debian-7.8.0-amd64-DVD-1.iso'
+	set initrdfile='/boot/iso/debian-7.8.0-amd64-DVD-1.hdd.initrd.gz'
+	loopback loop $isofile
+	linux (loop)/install.amd/vmlinuz vga=791 iso-scan/ask_second_pass=true iso-scan/filename=$isofile
+	initrd $initrdfile
+}
+
+
+######################################
+# Ubuntu
+######################################
+menuentry '[loopback]ubuntu-14.04.1-desktop-amd64' {
+	set isofile='/boot/iso/ubuntu-14.04.1-desktop-amd64.iso'
+	loopback loop $isofile
+	linux (loop)/casper/vmlinuz.efi boot=casper iso-scan/filename=$isofile locale=en_US.UTF-8
+	initrd (loop)/casper/initrd.lz
+}
+
+
+######################################
+# Kali Linux
+######################################
+menuentry "[loopback]kali-linux-1.0.7-amd64" {
+	set isofile='/boot/iso/kali-linux-1.0.7-amd64.iso'
+	loopback loop $isofile
+	linux (loop)/live/vmlinuz boot=live findiso=$isofile noconfig=sudo username=root hostname=kali
+	initrd (loop)/live/initrd.img
+}
